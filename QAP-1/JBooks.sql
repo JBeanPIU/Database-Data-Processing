@@ -42,9 +42,6 @@ CREATE TABLE Orders (
 )
 
 
------ SECTION: ALTER TABLE, ADDS FOREIGN KEY. -----
-ALTER TABLE Books ADD FOREIGN KEY (author_id) REFERENCES Authors(author_id);
-
 ----- SECTION: JUNCTION TABLES, ONE FOR DIFFERENT BOOK GENRES & KEEPING TRACK OF ORDER DETAILS. -----
 CREATE TABLE BookGenres (
     book_id BIGINT NOT NULL,
@@ -60,9 +57,27 @@ CREATE TABLE OrderDeets (
     order_id BIGINT NOT NULL,
     book_id BIGINT NOT NULL,
     quantity INT NOT NULL,
-    price BIGINT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL, -- for calculating cents better, forgot to put this down here initially
     PRIMARY KEY (order_id, book_id),
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (book_id) REFERENCES Books(book_id)
 )
 -- The order details table is used to track the specifics of each order, by linking orders & books together and storing specific information like quantity + price --
+
+
+----- SECTION: NORMALIZATION. -----
+-- This section provides the basic information for the normalization forms 
+-- 1NF: Every table contains atomic values, and involves no repeating groups.
+-- 2NF: Each non-key attributes are fully functional and dependant on the primary key.
+-- 3NF: No transitive depandancies, and non-key attributes don't depend on other non-key attributes.
+
+
+----- SECTION: RELATIONSHIPS. -----
+-- This section contains the relationship between the tables above!
+-- Books & Authors: this is a one-to-many type relationship (due to how authors can write multiple books)
+-- Books & Genres: is an example of a many-to-many relationship (a single book can belong to multiple genres, like The Hunger Games)
+-- Orders & Books: same as above, this is also a many-to-many relationship (orders can contain multiple books)
+-- Customers & Orders: one-to-many (customers can place multiple orders lol)
+
+-- *for any extra information regarding the two sections above (NORMALIZATION, RELATIONSHIPS) refer to the .pdf file attached.
+--  the .pdf shows the tables laid out and how they connect! These sections are very brief and are mostly for keeping jot notes!
