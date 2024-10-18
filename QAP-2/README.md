@@ -11,3 +11,6 @@ The second one involves a very similar pattern in terms of creating tables, data
 Overall took a good few hours to fully create, and the JuniShop (only now realized it's not even based on the same problem, but name stays LOL) was done all in one go, so there's no real commit changes done to it
 
 Thanks!
+
+*wait nevermind, README.md commit, this is for Matt specifically (my prof) but i tried my best to mess around with pgadmin and completely forgot how to set it up, so im praying
+ that everything is working properly, if not please go easy on me*
