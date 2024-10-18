@@ -2,6 +2,10 @@
 -- By: Cameron Beanland.                                                                      
 -- Date: October 16th, 2024.                      
 
+
+-- very basic setup, and wouldn't even work properly in SQL lol, just a layout to get started and will be updated very shortly*
+
+
 -- Code was written using PostgreSQL, incase of any syntax errors prevalent. --
 
 -- notes for later versions
