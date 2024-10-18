@@ -13,21 +13,21 @@ first_name VARCHAR(255) NOT NULL, -- varchar is used to store strings and 255 is
 last_name VARCHAR(255) NOT NULL,
 email VARCHAR(255) NOT NULL,
 school_enrollment_date DATE NOT NULL, -- used to configure start date of program
-)
+);
 
 CREATE TABLE professors (
 prof_id BIGINT PRIMARY KEY, 
 first_name VARCHAR(255) NOT NULL,
 last_name VARCHAR(255) NOT NULL,
 department_name VARCHAR(255) NOT NULL,
-)
+);
 
 CREATE TABLE courses (
     course_id BIGINT PRIMARY KEY,
     course_name VARCHAR(255) NOT NULL,
     course_description VARCHAR(255) NOT NULL,
     prof_id BIGINT REFERENCES professors(prof_id), -- prof_id required for courses
-)
+);
 
 CREATE TABLE enrollments (
     student_id BIGINT, 
