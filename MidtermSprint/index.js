@@ -3,6 +3,8 @@
 // Date: November 2nd, 2024
 
 // *a base template provided by Matthew English, some comments have been removed for clarity & have added some of my own flair *
+//  cont. this template is a godsend i'd be so lost otherwise LMAO
+
 const { Pool } = require('pg');
 
 // PostgreSQL connection
@@ -14,7 +16,7 @@ const pool = new Pool({
   port: 5432,
 });
 
-/* ===== SECTION: DESIGN TABLES...? ===== */
+/* ===== SECTION: DESIGN TABLES...? ============================================================ */
 async function createTable() {
   try {
     // this connects the tables to the database
@@ -63,7 +65,7 @@ async function createTable() {
   }
 }
 
-/* ===== SECTION: ASYNC MOVIE FUNCTIONS ===== */
+/* ===== SECTION: ASYNC MOVIE FUNCTIONS ============================================================ */
 /**
  * Inserts a new movie into the Movies table.
  * 
@@ -107,6 +109,8 @@ async function displayMovies() {
   }
 }
 
+
+/* ===== SECTION: CUSTOMER INFORMATION!!!!! ============================================================ */
 /**
  * Updates a customer's email address.
  * 
@@ -114,17 +118,49 @@ async function displayMovies() {
  * @param {string} newEmail New email address of the customer
  */
 async function updateCustomerEmail(customerId, newEmail) {
-  // TODO: Add code to update a customer's email address
-};
+  let query = `
+    UPDATE Customers
+    SET email = $1
+    WHERE custId = $2 
+  `; // $1 and $2 values are required to update the customer email and id
+
+  const values = [newEmail, customerId];
+
+  try {
+    const result = await pool.query(query, values);
+    if (result.rowCount > 0) {
+      console.log(`Email updated for customer ID: ${customerId}`);
+    } else {
+      console.log(`Sorry! No customer found with ID: ${customerId}`);
+    }
+  } catch (error) {
+    console.error("Sorry! Error while updating email: ", error.message);
+  }
+}
+
 
 /**
  * Removes a customer from the database along with their rental history.
  * 
- * @param {number} customerId ID of the customer to remove
+ * @param {number} custId ID of the customer to remove
  */
-async function removeCustomer(customerId) {
-  // TODO: Add code to remove a customer and their rental history
-};
+async function removeCustomer(custId) {
+  const query = `
+    DELETE FROM Customers
+    WHERE custId = $1
+  `;
+
+  try {
+    const result = await pool.query(query, [custId]);
+    if (result.rowCount > 0) {
+      console.log(`Customer ID: ${custId} has been terminated.`);
+    } else {
+      console.log(`Sorry! No customer found with that ID: ${custId}`);
+    }
+  } catch (error) {
+    console.error("Sorry! There was an issue while removing customer: ", error.message);
+  }
+}
 
 /**
  * Prints a help message to the console
@@ -137,6 +173,8 @@ function printHelp() {
   console.log('  remove <customer_id> - Remove a customer from the database');
 }
 
+
+/* ===== SECTION: RUN CLI APPLICATION ============================================================ */
 /**
  * Runs our CLI app to manage the movie rentals database
  */
@@ -156,7 +194,7 @@ async function runCLI() {
       await displayMovies();
       break;
     case 'update':
-      if (args.length !== 3) {
+      if (args.length !== 3) { 
         printHelp();
         return;
       }
@@ -173,6 +211,6 @@ async function runCLI() {
       printHelp();
       break;
   }
-};
+}; // this was all me i swear (he better not see this)
 
-runCLI();
+runCLI(); // im going to zip this and provide the base untampered repo to you and you're going to give me a 2%
