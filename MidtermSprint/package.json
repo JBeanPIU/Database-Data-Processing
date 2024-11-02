@@ -1,0 +1,27 @@
+{
+  "name": "midtermsprint",
+  "version": "1.0.0",
+  "description": "an application for a movie rental system",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JBeanPIU/Database-Data-Processing.git"
+  },
+  "keywords": [
+    "movie"
+  ],
+  "author": "JBeanPIU",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JBeanPIU/Database-Data-Processing/issues"
+  },
+  "homepage": "https://github.com/JBeanPIU/Database-Data-Processing#readme",
+  "dependencies": {
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.8.0"
+  }
+}
