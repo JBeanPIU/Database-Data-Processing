@@ -11,55 +11,76 @@ const Task = require('./task'); // links back to the task.js file to nab Task co
 
 app.use(express.json());
 
-let tasks = [
-    { id: 1, description: 'Buy groceries', status: 'incomplete' },
-    { id: 2, description: 'Read a book', status: 'complete' },
-];
+// originally had let tasks = so and so but now that we're using MongoDB we can use that for more persistant storage
+
+// ============================================================================
 
 // BROWSER page setup, anything that I need to display on a page will be put down here
 app.get('/', (request, response) => {
     response.send('The J');
 });
 
-// GET /tasks - Get all tasks                           /m
-app.get('/tasks', (req, res) => {
-    res.json(tasks);
+// ============================================================================
+
+// GET /tasks/:id - Get all tasks                                                               /m
+app.get('/tasks', async (req, res) => { // changed most of these to async so i can use additional features, await is an example of such
+    try {
+        const tasks = await Task.find();
+        res.json(tasks);                // like it says at the top, this just retrieves all tasks from the db and displays to user 
+    } catch (error) {
+        res.status(500).json({error: 'Database query error!'});
+    }
 });
 
-// POST /tasks - Add a new task
-app.post('/tasks', (request, response) => {
-    const { id, description, status } = request.body;
-    if (!id || !description || !status) {
-        return response.status(400).json({ error: 'All fields (id, description, status) are required' });
+// ============================================================================
+
+// POST /tasks/:id - Add a new task                                                               /m
+app.post('/tasks', async (req, res) => {
+    const { description, status } = req.body;
+    if (!description || !status) {
+        return res.status(400).json({ error: 'All fields (description, status) are required' });
     }
 
-    tasks.push({ id, description, status });
-    response.status(201).json({ message: 'Task added successfully' });
+    const task = new Task({ description, status }); // used to add new task to the db, given it has a description and status
+                                                    // because of MongoDB, we don't need id tag anymore since it auto generates
+    try {
+        const newTask = await task.save();
+        res.status(201).json({ message: 'Task added successfully', task: newTask });
+    } catch (error) {
+        res.status(500).json({ error: 'Database insertion error' });
+    }
 });
+
+// ============================================================================
 
 // PUT /tasks/:id - Update a task's status
-app.put('/tasks/:id', (request, response) => {
-    const taskId = parseInt(request.params.id, 10);
-    const { status } = request.body;
-    const task = tasks.find(t => t.id === taskId);
+app.put('/tasks/:id', async (req, res) => {
+    const { status } = req.body;
 
-    if (!task) {
-        return response.status(404).json({ error: 'Task not found' });
+    try {
+        const updatedTask = await Task.findByIdAndUpdate(req.params.id, { status }, { new: true });
+        if (!updatedTask) {
+            return res.status(404).json({ error: 'Task not found' });   // this'll update status of an existing task in the db based on its id num
+        }
+        res.json({ message: 'Task updated successfully', task: updatedTask });
+    } catch (error) {
+        res.status(500).json({ error: 'Database update error' });
     }
-    task.status = status;
-    response.json({ message: 'Task updated successfully' });
 });
 
-// DELETE /tasks/:id - Delete a task
-app.delete('/tasks/:id', (request, response) => {
-    const taskId = parseInt(request.params.id, 10);
-    const initialLength = tasks.length;
-    tasks = tasks.filter(t => t.id !== taskId);
+// ============================================================================
 
-    if (tasks.length === initialLength) {
-        return response.status(404).json({ error: 'Task not found' });
+// DELETE /tasks/:id - Delete a task                                                               /m
+app.delete('/tasks/:id', async (req, res) => {
+    try {
+        const delTask = await Task.findByIdAndDelete(req.params.id);
+        if (!delTask) {
+            return res.status(404).json({ error: 'Task could not be found' }); // simply deletes a task from the db, based on its id as well
+        }
+        res.json({ message: 'Task successfully deleted', task: delTask });
+    } catch (error) {
+        res.status(500).json({ error: 'Deletion error, try again?' });
     }
-    response.json({ message: 'Task deleted successfully' });
 });
 
 app.listen(PORT, () => {
