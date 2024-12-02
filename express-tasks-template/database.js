@@ -5,15 +5,19 @@
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongo.db://localhost:3000/taskmanager', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+// connecting to MDB
+mongoose.connect('mongo.db://localhost:27017/taskmanager', {
+    useNewUrlParser: true, // helps avoid deprecation warnings
+    useUnifiedTopology: true // mainly a discovery and monitering engine
 });
 
+// default connection setup
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'sorry! connection error:'));
+
+// bind connections
+db.on('error', console.error.bind(console, 'sorry! connection error:')); // binds to error event and displays message if there's a connection error lol
 db.once('open', () => {
-    console.log('You made it to MongoDB');
+    console.log('You made it to MongoDB'); // displays whether you successfully connected or not
 });
 
-module.exports = mongoose;
+module.exports = mongoose; // export so it can be used elsewhere
