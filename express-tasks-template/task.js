@@ -3,7 +3,7 @@
 // By: Cameron Beanland
 // Date: Dec. 2nd, 2024
 
-const mongoose = require('./db'); // import mongoose
+const mongoose = require('./database'); // import mongoose
 
 // schema creation
 const tSchema = new mongoose.Schema({
