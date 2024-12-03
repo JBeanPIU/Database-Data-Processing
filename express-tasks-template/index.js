@@ -9,6 +9,7 @@ const app = express();
 const PORT = 3000;
 const mongoose = require('./database');  // This connects to the MongoDB using your settings in database.js
 const Task = require('./task'); // links back to the task.js file to nab Task const (i swear it's different from the task const below)
+const Book = require('./books');
 
 app.use(express.json());
 
@@ -83,6 +84,60 @@ app.delete('/tasks/:id', async (req, res) => {
         res.status(500).json({ error: 'Deletion error, try again?' });
     }
 });
+
+// ============================================================================
+
+// SAMPLE DATA SECTION!!!! This includes all sample data for query usage
+const insertBooks = async () => {
+    try {
+        await Book.insertMany([
+            { title: "The Hobbit", author: "J.R.R. Tolkien", genre: "Fantasy", year: 1937 },
+            { title: "To Kill a Mockingbird", author: "Harper Lee", genre: "Fiction", year: 1960 },
+            { title: "1984", author: "George Orwell", genre: "Dystopian", year: 1949 }
+        ]);
+        console.log("Sample data inserted successfully");
+    } catch (error) {
+        console.error("Error inserting sample data:", error);
+    }
+};
+
+// ============================================================================
+
+// QUERIES FOR CRUD OPERATIONS!!!! Down below is all query functions to test if everything works properly
+
+// 1) Retrieve the titles of all books
+const getAllBookTitles = async () => {
+    const titles = await Book.find({}, 'title -_id');
+    console.log(titles);
+};
+
+// 2) Find all books written by 'J.R.R. Tolkien'
+const getBooksByTolkien = async () => {
+    const books = await Book.find({ author: "J.R.R. Tolkien" });
+    console.log(books);
+};
+
+// 3) Update the genre of "1984" to "Science Fiction"
+const updateGenreOf1984 = async () => {
+    await Book.updateOne({ title: "1984" }, { genre: "Science Fiction" });
+    console.log("Genre of '1984' updated to 'Science Fiction'");
+};
+
+// 4) Delete the book "The Hobbit" (please forgive me hobbit)
+const deleteTheHobbit = async () => {
+    await Book.deleteOne({ title: "The Hobbit" });
+    console.log("'The Hobbit' deleted from the collection");
+};
+
+// execute all queries NOW
+getAllBookTitles();
+getBooksByTolkien();
+updateGenreOf1984();
+deleteTheHobbit();
+
+insertBooks();
+
+// ============================================================================
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
