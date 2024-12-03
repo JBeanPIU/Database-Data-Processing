@@ -7,6 +7,7 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
+const mongoose = require('./database');  // This connects to the MongoDB using your settings in database.js
 const Task = require('./task'); // links back to the task.js file to nab Task const (i swear it's different from the task const below)
 
 app.use(express.json());
