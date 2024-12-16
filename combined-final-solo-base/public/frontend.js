@@ -16,9 +16,11 @@ socket.onmessage = function(event) {
     }
 };
 
+// ================================================================
+
 // Listen for additional messages from the server
 socket.addEventListener('message', (event) => {
-    const data = JSON.parse(event.data);
+    const data = JSON.parse(event.data);                                        // didn't really touch this at all, don't think it affected anything though
 
     // Handle events from the socket (e.g., new polls, vote updates)
 });
@@ -40,6 +42,8 @@ function onNewPollAdded(data) {
     });
 }
 
+// ================================================================
+
 /**
  * Handles updating the number of votes an option has when a new vote is received from the server
  * 
@@ -50,6 +54,8 @@ function onIncomingVote(data) {
     const voteElement = document.getElementById(`${pollId}_${selectedOption}`); 
     voteElement.innerHTML = `<strong>${selectedOption}:</strong> ${votes} votes`; 
 }
+
+// ================================================================
 
 /**
  * Handles processing a user's vote when they click on an option to vote
@@ -68,6 +74,8 @@ function onVoteClicked(event) {
     socket.send(JSON.stringify({type: 'new_vote', pollId, selectedOption}));
 }
 
+// ================================================================
+
 // Adds a listener to each existing poll to handle things when the user attempts to vote
 document.querySelectorAll('.poll-form').forEach((pollForm) => {
     pollForm.onsubmit = function(event) {
@@ -80,6 +88,8 @@ document.querySelectorAll('.poll-form').forEach((pollForm) => {
         socket.send(JSON.stringify({type: 'new_vote', pollId, selectedOption}));
     };
 });
+
+// ================================================================
 
 /**
  * Creates a new poll element to be added to the page
@@ -109,7 +119,7 @@ function createPollElement(poll) {
     pollContainer.appendChild(optionsList);
 
     const form = document.createElement('form');
-    form.className = 'poll-form button-container';                  // this entire section is confusing af, but it's using some html structure to help organize the polls
+    form.className = 'poll-form button-container';                  // this entire section was confusing af to me, but it's using some html structure like li and ul to organize polls
                                                                     // when they finish being created
     poll.options.forEach(option => {
         const button = document.createElement('button');
@@ -125,10 +135,11 @@ function createPollElement(poll) {
     input.type = 'text';
     input.style.display = 'none';
     input.value = poll.id;
-    input.name = 'poll-id';
+    input.name = 'poll-id';                                         // i kinda gave up with comments on this file but i imagine you know how it works 💀
     form.appendChild(input);
 
     pollContainer.appendChild(form);
 
     return pollContainer;
 }
+
