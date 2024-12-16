@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="main-content">
+        <h1>User Profile</h1>
+        <h2>Welcome to your profile!</h2>
+        <p>you can view your username and email associated, <br />plus check the polls you voted on and see <br />how many others voted with your answer!</p>
+        <div class="profile-details">
+            <p><strong>Username:</strong> <%= user.username %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Number of Polls Voted In:</strong> <%= user.votedPolls.length %></p>
+            <h2>Voted Polls</h2>
+            <ul>
+                <% user.votedPolls.forEach((poll) => { %>
+                    <li>
+                        <p><strong>Question:</strong> <%= poll.question %></p>
+                        <% const userVote = poll.options.find(option => option.votes > 0); %>
+                        <% if (userVote) { %>
+                            <p><strong>Your Answer:</strong> <%= userVote.answer %></p>
+                            <p><strong>Votes for Your Answer:</strong> <%= userVote.votes %></p>
+                        <% } %>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+        <a href="/logout" class="action-button">Logout</a>
+    </div>
+</body>
+</html>
