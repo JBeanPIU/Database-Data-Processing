@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="main-content">
+        <h1>Active Polls</h1>
+        <ul id="polls">
+            <% polls.forEach((poll) => { %>
+                <li class="poll-container" id="<%= poll.id %>">
+                    <h2><%= poll.question %></h2>
+                    <ul class="poll-options">
+                        <% poll.options.forEach(option => { %>
+                            <li>
+                                <form action="/vote" method="POST">
+                                    <input type="hidden" name="pollId" value="<%= poll.id %>">
+                                    <input type="hidden" name="selectedOption" value="<%= option.answer %>">
+                                    <button type="submit" class="action-button">Vote for <%= option.answer %></button>
+                                </form>
+                                <p><strong><%= option.answer %>:</strong> <%= option.votes %> votes</p>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </li>
+            <% }); %>
+        </ul>
+        <a href="/profile" class="action-button">Profile</a>
+        <a href="/logout" class="logout-link">Logout</a>
+    </div>
+    <script src="/frontend.js"></script>
+</body>
+</html>
