@@ -1,14 +1,15 @@
-<!-- views/login.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="/styles.css"> <!-- Include your CSS file -->
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
     <div class="main-content">
         <h1>Login</h1>
+        <p>please tell me you remember your login credentials</p>
+        <br />
         <form action="/login" method="POST" style="width: 300px;">
             <% if (errorMessage) { %>
                 <p class="error-message"><%= errorMessage %></p>
